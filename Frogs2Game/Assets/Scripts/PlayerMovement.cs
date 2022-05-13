@@ -33,6 +33,14 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float moveBy = x * speed;
         rb.velocity = new Vector2(moveBy, rb.velocity.y);
+        if(rb.velocity.x < 0 )
+        {
+            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+        }
+        if(rb.velocity.x > 0 )
+        {
+            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);;
+        }
     }
     void Jump(){
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || Time.time - lastTimeGrounded <= rememberGroundedFor))
