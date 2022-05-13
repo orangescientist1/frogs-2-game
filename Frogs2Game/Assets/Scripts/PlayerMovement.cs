@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     float lastTimeGrounded;
     public GameObject Sword;
     bool canAttack = true;
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
 
     void Start(){
         rb = GetComponent<Rigidbody2D>();
@@ -23,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     void Update(){
         Move();
         Jump();
+        JumpPlus();
         CheckIfGrounded();
         Attack();
     }
@@ -34,7 +37,18 @@ public class PlayerMovement : MonoBehaviour
     void Jump(){
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || Time.time - lastTimeGrounded <= rememberGroundedFor))
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.velocity = Vector2.up * jumpForce;
+        }
+    }
+    void JumpPlus()
+    {
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space))
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
     }
     void CheckIfGrounded(){
