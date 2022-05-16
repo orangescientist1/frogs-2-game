@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (rb.velocity.x == 0f){
             anim.SetBool("IsRunning", false);
+            Debug.Log("HELP");
         } else{
             anim.SetBool("IsRunning", true);
         }
@@ -42,10 +43,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (rb.velocity.y == 0f){
             //Not Moving Vertically
-        } else if (rb.velocity.y > 0f){
+        } else if (rb.velocity.y > 0.2f){
             anim.SetBool("IsJumping", true);
             anim.SetBool("IsFalling", false);
-        } else if (rb.velocity.y < 0f){
+        } else if (rb.velocity.y < 0.2f){
             anim.SetBool("IsJumping", false);
             anim.SetBool("IsFalling", true);
         }
@@ -108,5 +109,9 @@ public class PlayerMovement : MonoBehaviour
         anim.SetTrigger("Attack");
         yield return new WaitForSeconds(0.3f);
         canAttack = true;
+    }
+
+    public void Frogify(){
+
     }
 }
