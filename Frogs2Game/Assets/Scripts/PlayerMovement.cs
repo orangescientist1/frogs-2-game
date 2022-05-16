@@ -14,10 +14,10 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;
     public float rememberGroundedFor = 0.06f;
     float lastTimeGrounded;
-    public GameObject Sword;
     bool canAttack = true;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
+    public Animator anim;
 
     void Start(){
         rb = GetComponent<Rigidbody2D>();
@@ -28,6 +28,27 @@ public class PlayerMovement : MonoBehaviour
         JumpPlus();
         CheckIfGrounded();
         Attack();
+
+        if (rb.velocity.x == 0f){
+            anim.SetBool("IsRunning", false);
+        } else{
+            anim.SetBool("IsRunning", true);
+        }
+
+        if (isGrounded){
+            anim.SetBool("IsJumping", false);
+            anim.SetBool("IsFalling", false);
+        }
+
+        if (rb.velocity.y == 0f){
+            //Not Moving Vertically
+        } else if (rb.velocity.y > 0f){
+            anim.SetBool("IsJumping", true);
+            anim.SetBool("IsFalling", false);
+        } else if (rb.velocity.y < 0f){
+            anim.SetBool("IsJumping", false);
+            anim.SetBool("IsFalling", true);
+        }
     }
     void Move(){
         float x = Input.GetAxis("Horizontal");
@@ -83,11 +104,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     public IEnumerator AttackAnimation(){
-        //Temporary Attack Animation
         canAttack = false;
-        Sword.SetActive(true);
+        anim.SetTrigger("Attack");
         yield return new WaitForSeconds(0.3f);
-        Sword.SetActive(false);
         canAttack = true;
     }
 }
